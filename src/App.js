@@ -3,7 +3,8 @@ import React from "react";
 import "./App.css";
 
 import Search from "./components/Search";
-import Shelf from "./components/Shelf";
+import BookList from "./components/BookList";
+import SearchButton from "./components/SearchButton";
 
 class BooksApp extends React.Component {
   state = {
@@ -26,17 +27,8 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-            <div className="list-books-content">
-              <div />
-              <Shelf />
-              <Shelf />
-              <Shelf />
-            </div>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>
-                Add a book
-              </a>
-            </div>
+            <BookList />
+            <SearchButton />
           </div>
         )}
       </div>
