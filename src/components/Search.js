@@ -7,7 +7,7 @@ class Search extends React.Component {
         <div className="search-books-bar">
           <a
             className="close-search"
-            onClick={() => this.setState({ showSearchPage: false })}
+            onClick={this.props.closeSearch}
           >
             Close
           </a>
