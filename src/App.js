@@ -5,20 +5,30 @@ import "./App.css";
 import Search from "./components/Search";
 import BookList from "./components/BookList";
 import SearchButton from "./components/SearchButton";
+import * as BooksAPI from "./BooksAPI";
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      allBooks:[],
+      /**
+       * TODO: Instead of using this state variable to keep track of which page
+       * we're on, use the URL in the browser's address bar. This will ensure that
+       * users can use the browser's back and forward buttons to navigate between
+       * pages, as well as provide a good URL they can bookmark and share.
+       */
+      showSearchPage: false
+    };
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then(allBooks => this.setState({allBooks}));
+  }
 
   render() {
-    const allBooks = [];
+
+    console.log(this.state.allBooks);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -32,9 +42,9 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-            <BookList books={allBooks} />
+            <BookList books={this.state.allBooks} />
             <SearchButton
-              books={allBooks}
+              books={this.state.allBooks}
               showSearchPage={() => {
                 this.setState({ showSearchPage: true });
               }}
