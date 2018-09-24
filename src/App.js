@@ -34,6 +34,7 @@ class BooksApp extends React.Component {
     }));
     BooksAPI.update(book, shelf);
   }
+
   render() {
     return (
       <div className="app">
@@ -51,12 +52,7 @@ class BooksApp extends React.Component {
                 books={this.state.allBooks}
                 changeBookShelf={this.updateBookShelf}
               />
-              <SearchButton
-                books={this.state.allBooks}
-                showSearchPage={() => {
-                  this.setState({ showSearchPage: true });
-                }}
-              />
+              <SearchButton books={this.state.allBooks} />
             </div>
           )}
         />
