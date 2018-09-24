@@ -11,7 +11,7 @@ class BooksApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      allBooks:[],
+      allBooks: [],
       /**
        * TODO: Instead of using this state variable to keep track of which page
        * we're on, use the URL in the browser's address bar. This will ensure that
@@ -20,14 +20,27 @@ class BooksApp extends React.Component {
        */
       showSearchPage: false
     };
+    this.updateBookShelf = this.updateBookShelf.bind(this);
   }
-
+  
   componentDidMount() {
-    BooksAPI.getAll().then(allBooks => this.setState({allBooks}));
+    BooksAPI.getAll().then(allBooks => this.setState({ allBooks }));
   }
 
+  /**
+   * 
+   * @param {*} book that is to be moved
+   * @param {*} shelf to be moved to
+   */
+  updateBookShelf(book, shelf) {
+    this.setState(state => ({
+      allBooks: state.allBooks.map(b => {
+        b.id === book.id ? b.shelf = shelf : b; 
+        return b;
+      })
+    }));
+  }
   render() {
-
     console.log(this.state.allBooks);
     return (
       <div className="app">
@@ -42,7 +55,10 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-            <BookList books={this.state.allBooks} />
+            <BookList
+              books={this.state.allBooks}
+              changeBookShelf={this.updateBookShelf}
+            />
             <SearchButton
               books={this.state.allBooks}
               showSearchPage={() => {

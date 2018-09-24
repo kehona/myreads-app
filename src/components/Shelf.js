@@ -3,9 +3,10 @@ import React from "react";
 class Shelf extends React.Component {
   render() {
     const shelfBooks = this.props.books === undefined ? [] : this.props.books;
+    const changeShelf = this.props.changeShelf;
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">Currently Reading</h2>
+        <h2 className="bookshelf-title">{this.props.title}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             {shelfBooks.map(book => (
@@ -21,7 +22,7 @@ class Shelf extends React.Component {
                       }}
                     />
                     <div className="book-shelf-changer">
-                      <select>
+                      <select onChange={e => changeShelf(book, e.target.value)}>
                         <option value="move" disabled>
                           Move to...
                         </option>
