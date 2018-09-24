@@ -3,7 +3,7 @@ import React from "react";
 import "./App.css";
 
 import Search from "./components/Search";
-import BookList from "./components/BookList";
+import Shelves from "./components/Shelves";
 import SearchButton from "./components/SearchButton";
 import * as BooksAPI from "./BooksAPI";
 
@@ -28,21 +28,20 @@ class BooksApp extends React.Component {
   }
 
   /**
-   * update the shelf a book belongs to. 
+   * update the shelf a book belongs to.
    * @param {*} book that is to be moved
    * @param {*} shelf to be moved to
    */
   updateBookShelf(book, shelf) {
     this.setState(state => ({
       allBooks: state.allBooks.map(b => {
-        b.id === book.id ? b.shelf = shelf : b; 
+        b.id === book.id ? (b.shelf = shelf) : b;
         return b;
       })
     }));
     BooksAPI.update(book, shelf);
   }
   render() {
-    console.log(this.state.allBooks);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -56,7 +55,7 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-            <BookList
+            <Shelves
               books={this.state.allBooks}
               changeBookShelf={this.updateBookShelf}
             />
