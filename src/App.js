@@ -22,13 +22,13 @@ class BooksApp extends React.Component {
     };
     this.updateBookShelf = this.updateBookShelf.bind(this);
   }
-  
+
   componentDidMount() {
     BooksAPI.getAll().then(allBooks => this.setState({ allBooks }));
   }
 
   /**
-   * 
+   * update the shelf a book belongs to. 
    * @param {*} book that is to be moved
    * @param {*} shelf to be moved to
    */
@@ -39,6 +39,7 @@ class BooksApp extends React.Component {
         return b;
       })
     }));
+    BooksAPI.update(book, shelf);
   }
   render() {
     console.log(this.state.allBooks);
