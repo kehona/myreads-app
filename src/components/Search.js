@@ -6,32 +6,47 @@ import * as BooksAPI from "../BooksAPI";
 class Search extends React.Component {
   state = {
     query: "",
-    books: []
+    searchBooks: []
   };
   handleSearch(query) {
     this.setState({
       query: query
     });
     if (query !== "") {
-      BooksAPI.search(query)
-        .then(bks => {
-          if (!bks.error) {
-              console.log(bks)
-            this.setState(state => ({
-              books: bks
-            }));
-          } else {
-              console.log(bks)
-            this.setState({
-                books: []
-              });
-          }
-        })
+      BooksAPI.search(query).then(bks => {
+        if (!bks.error) {
+          console.log(bks);
+          // set state for seach
+          this.setState({
+            searchBooks: bks.filter(b => b.imageLinks !== undefined) // filter out books without imagelinks
+          });
+        } else {
+          console.log(bks);
+          this.setState({
+            searchBooks: []
+          });
+        }
+      });
     } else {
       this.setState({
-        books: []
+        searchBooks: []
       });
     }
+  }
+  /**
+   * update the shelf a book belongs to.
+   * @param {*} book that is to be moved
+   * @param {*} shelf to be moved to
+   */
+  handleChange(book, shelf) {
+    this.setState(state => ({
+      searchBooks: state.searchBooks.map(b => {
+        b.id === book.id ? (b.shelf = shelf) : b;
+        return b;
+      })
+    }));
+    // add to shelf
+    this.props.changeBookShelf(book, shelf);
   }
   render() {
     return (
@@ -61,7 +76,7 @@ class Search extends React.Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.map(book => (
+            {this.state.searchBooks.map(book => (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
@@ -74,7 +89,10 @@ class Search extends React.Component {
                       }}
                     />
                     <div className="book-shelf-changer">
-                      <select value={book.shelf}>
+                      <select
+                        value={book.shelf === undefined ? "none" : book.shelf}
+                        onChange={e => this.handleChange(book, e.target.value)}
+                      >
                         <option value="move" disabled>
                           Move to...
                         </option>

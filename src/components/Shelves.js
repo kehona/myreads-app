@@ -5,6 +5,7 @@ import Shelf from "./Shelf";
 class Shelves extends React.Component {
   render() {
     const books = this.props.books;
+    console.log(books);
     const currentlyReading = books.filter(
       book => book.shelf === "currentlyReading"
     );

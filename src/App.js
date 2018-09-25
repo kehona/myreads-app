@@ -26,19 +26,33 @@ class BooksApp extends React.Component {
    * @param {*} shelf to be moved to
    */
   updateBookShelf(book, shelf) {
-    this.setState(state => ({
-      allBooks: state.allBooks.map(b => {
-        b.id === book.id ? (b.shelf = shelf) : b;
-        return b;
-      })
-    }));
+    let bk = this.state.allBooks.filter(b => b.id === book.id);
+    console.log(bk);
+    if (bk.length === 0) {
+      // add new book
+      book["shelf"] = shelf;
+      this.setState(state => ({
+        allBooks: state.allBooks.concat([book])
+      }));
+    } else {
+      this.setState(state => ({
+        allBooks: state.allBooks.map(b => {
+          b.id === book.id ? (b.shelf = shelf) : b;
+          return b;
+        })
+      }));
+    }
     BooksAPI.update(book, shelf);
+    console.log(this.state.allBooks);
   }
 
   render() {
     return (
       <div className="app">
-        <Route path="/search" component={Search} />
+        <Route
+          path="/search"
+          render={() => <Search changeBookShelf={this.updateBookShelf} />}
+        />
 
         <Route
           exact
@@ -52,7 +66,11 @@ class BooksApp extends React.Component {
                 books={this.state.allBooks}
                 changeBookShelf={this.updateBookShelf}
               />
-              <SearchButton books={this.state.allBooks} />
+              <SearchButton
+                books={this.state.allBooks}
+                query={this.state.query}
+                result={this.state.searchResult}
+              />
             </div>
           )}
         />
