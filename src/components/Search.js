@@ -15,11 +15,14 @@ class Search extends React.Component {
     if (query !== "") {
       BooksAPI.search(query).then(bks => {
         if (!bks.error) {
-          console.log(bks);
-          // set state for seach
-          this.setState({
-            searchBooks: bks.filter(b => b.imageLinks !== undefined) // filter out books without imagelinks
-          });
+          // set shelf for each book
+          Promise.all(this.updateShelfsForSearchRecords(bks))
+            // console.log(b)
+            .then(updatedBks => {
+              this.setState({
+                searchBooks: updatedBks.filter(b => b.imageLinks !== undefined) // filter out books without imagelinks
+              });
+            });
         } else {
           console.log(bks);
           this.setState({
@@ -28,10 +31,15 @@ class Search extends React.Component {
         }
       });
     } else {
+      // if query is empty
       this.setState({
         searchBooks: []
       });
     }
+  }
+
+  updateShelfsForSearchRecords(bks) {
+    return bks.map(book => BooksAPI.get(book.id));
   }
   /**
    * update the shelf a book belongs to.
